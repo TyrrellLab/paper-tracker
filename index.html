@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Paper Tracker | Tyrrell Lab</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-row">
+      <div>
+        <p class="kicker">Tyrrell Lab</p>
+        <h1>Paper Tracker</h1>
+      </div>
+      <nav class="top-links" id="topLinks" hidden>
+        <a href="https://docs.google.com/spreadsheets/d/1Wa4ucpxtH7Dv3_HeGAF_y9fjjDtiq6vki7oI3AcM5CQ/edit" target="_blank" rel="noopener">Open sheet</a>
+        <button type="button" class="linkish" id="refreshBtn">Refresh</button>
+        <button type="button" class="linkish" id="signOutBtn">Sign out</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Passcode gate -->
+  <main class="wrap" id="gate" hidden>
+    <form class="card gate" id="gateForm">
+      <h2>Lab passcode</h2>
+      <p class="muted">Enter the lab passcode to see the paper list. This device will remember it.</p>
+      <label class="field">
+        <span>Passcode</span>
+        <input id="passInput" type="password" autocomplete="current-password" required>
+      </label>
+      <label class="field">
+        <span>Your name (shown on notes you add)</span>
+        <input id="nameInput" type="text" autocomplete="name" maxlength="40" placeholder="e.g. Dan">
+      </label>
+      <button class="btn" type="submit">Open</button>
+      <p class="error" id="gateError" role="alert"></p>
+    </form>
+  </main>
+
+  <!-- Dashboard -->
+  <main class="wrap" id="app" hidden>
+    <section class="filters" aria-label="Search and filter">
+      <div class="search-row">
+        <label class="field grow">
+          <span>Search titles, journals and notes</span>
+          <input id="q" type="search" placeholder="e.g. microglia, CD8, Nat Aging">
+        </label>
+        <label class="field grow">
+          <span>Author</span>
+          <input id="author" type="search" placeholder="e.g. Artyomov">
+        </label>
+        <label class="field">
+          <span>Sort</span>
+          <select id="sort">
+            <option value="added">Newest added</option>
+            <option value="year">Newest published</option>
+            <option value="yearOld">Oldest published</option>
+            <option value="title">Title A to Z</option>
+          </select>
+        </label>
+      </div>
+      <div class="chip-group">
+        <span class="chip-label">Topics</span>
+        <div class="chips" id="topicChips"></div>
+      </div>
+      <div class="chip-group">
+        <span class="chip-label">Model</span>
+        <div class="chips" id="modelChips"></div>
+        <span class="chip-label spacer">Other</span>
+        <div class="chips" id="otherChips"></div>
+      </div>
+      <div class="status-row">
+        <p id="count" aria-live="polite"></p>
+        <button type="button" class="linkish" id="clearBtn">Clear filters</button>
+      </div>
+    </section>
+
+    <ol class="papers" id="list"></ol>
+    <div class="more"><button type="button" class="btn ghost" id="moreBtn" hidden>Show more</button></div>
+  </main>
+
+  <p class="wrap loading" id="loading" hidden>Loading papers…</p>
+
+  <script src="config.js?v=1"></script>
+  <script src="app.js?v=1"></script>
+</body>
+</html>
