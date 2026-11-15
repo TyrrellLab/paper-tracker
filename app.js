@@ -1,4 +1,4 @@
-// Tyrrell Lab Paper Tracker dashboard.
+// T-Lab Papers dashboard (Tyrrell Lab Paper Tracker).
 // Data comes from the Google Sheet through the Apps Script web app in config.js.
 (function () {
   'use strict';

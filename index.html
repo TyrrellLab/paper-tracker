@@ -3,26 +3,38 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Paper Tracker | Tyrrell Lab</title>
+  <title>T-Lab Papers</title>
   <meta name="robots" content="noindex">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=1">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
   <header class="top">
-    <div class="wrap top-row">
-      <div>
-        <p class="kicker">Tyrrell Lab</p>
-        <h1>Paper Tracker</h1>
-      </div>
-      <nav class="top-links" id="topLinks" hidden>
-        <a href="https://docs.google.com/spreadsheets/d/1Wa4ucpxtH7Dv3_HeGAF_y9fjjDtiq6vki7oI3AcM5CQ/edit" target="_blank" rel="noopener">Open sheet</a>
-        <button type="button" class="linkish" id="refreshBtn">Refresh</button>
-        <button type="button" class="linkish" id="signOutBtn">Sign out</button>
-      </nav>
+    <div class="header-content">
+      <h1>T-Lab Papers</h1>
+      <pre class="ascii-logo" aria-hidden="true">████████╗      ██╗      █████╗ ██████╗
+╚══██╔══╝      ██║     ██╔══██╗██╔══██╗
+   ██║   █████╗██║     ███████║██████╔╝
+   ██║   ╚════╝██║     ██╔══██║██╔══██╗
+   ██║         ███████╗██║  ██║██████╔╝
+   ╚═╝         ╚══════╝╚═╝  ╚═╝╚═════╝
+
+██████╗  █████╗ ██████╗ ███████╗██████╗ ███████╗
+██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔══██╗██╔════╝
+██████╔╝███████║██████╔╝█████╗  ██████╔╝███████╗
+██╔═══╝ ██╔══██║██╔═══╝ ██╔══╝  ██╔══██╗╚════██║
+██║     ██║  ██║██║     ███████╗██║  ██║███████║
+╚═╝     ╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝</pre>
+      <p class="subtitle">The Tyrrell Lab reading list</p>
+      <p class="tagline">Search, filter and annotate the papers the lab is tracking. Notes save back to the shared sheet.</p>
     </div>
+    <nav class="top-links" id="topLinks" hidden>
+      <a href="https://docs.google.com/spreadsheets/d/1Wa4ucpxtH7Dv3_HeGAF_y9fjjDtiq6vki7oI3AcM5CQ/edit" target="_blank" rel="noopener">Open sheet</a>
+      <button type="button" class="linkish" id="refreshBtn">Refresh</button>
+      <button type="button" class="linkish" id="signOutBtn">Sign out</button>
+    </nav>
   </header>
 
   <!-- Passcode gate -->
@@ -87,7 +99,12 @@
 
   <p class="wrap loading" id="loading" hidden>Loading papers…</p>
 
+  <footer>
+    <p>T-Lab Papers is maintained by the <a href="https://tyrrelllab.github.io/" target="_blank" rel="noopener">Tyrrell Lab</a> at UAB.
+    Paper data from <a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">PubMed</a>.</p>
+  </footer>
+
   <script src="config.js?v=1"></script>
-  <script src="app.js?v=1"></script>
+  <script src="app.js?v=2"></script>
 </body>
 </html>

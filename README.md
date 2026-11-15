@@ -1,6 +1,6 @@
-# Tyrrell Lab Paper Tracker
+# T-Lab Papers
 
-A dashboard for the lab's Paper Tracker Google Sheet:
+T-Lab Papers is a dashboard for the lab's Paper Tracker Google Sheet:
 https://tyrrelllab.github.io/paper-tracker/
 
 - Search titles, journals and notes, and search by author.
