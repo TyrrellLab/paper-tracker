@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
   <header class="top">
@@ -29,6 +29,11 @@
 ╚═╝     ╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝</pre>
       <p class="subtitle">The Tyrrell Lab reading list</p>
       <p class="tagline">Search, filter and annotate the papers the lab is tracking. Notes save back to the shared sheet.</p>
+      <button type="button" class="quote" id="quote" title="Next quote">
+        <span class="q-prompt" aria-hidden="true">&gt;</span>
+        <span class="q-text" aria-hidden="true"></span><span class="cursor" aria-hidden="true"></span>
+        <span class="q-who" aria-hidden="true"></span>
+      </button>
     </div>
     <nav class="top-links" id="topLinks" hidden>
       <a href="https://docs.google.com/spreadsheets/d/1Wa4ucpxtH7Dv3_HeGAF_y9fjjDtiq6vki7oI3AcM5CQ/edit" target="_blank" rel="noopener">Open sheet</a>
@@ -104,6 +109,7 @@
     Paper data from <a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">PubMed</a>.</p>
   </footer>
 
+  <script src="quotes.js?v=1"></script>
   <script src="config.js?v=1"></script>
   <script src="app.js?v=2"></script>
 </body>
