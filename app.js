@@ -68,6 +68,30 @@
     return d.notes;
   }
 
+  async function saveTags(paper, tags) {
+    const r = await fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'tags', k: store.get(KEY), pmid: paper.pmid, title: paper.title, tags }),
+    });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error || 'Could not save.');
+    return d.tags;
+  }
+
+  // Tags that are not one of the standard topics or models, A to Z.
+  function customTags() {
+    const set = new Set();
+    state.papers.forEach(p => p._tags.forEach(t => { if (!TOPICS.includes(t) && !MODELS.includes(t)) set.add(t); }));
+    return [...set].sort((a, b) => a.localeCompare(b));
+  }
+
+  // Standard topics first, then custom tags, then Human/Mouse, matching the sheet.
+  function orderTags(list) {
+    const rank = t => (TOPICS.includes(t) ? TOPICS.indexOf(t) : MODELS.includes(t) ? 1000 + MODELS.indexOf(t) : 500);
+    return list.slice().sort((a, b) => rank(a) - rank(b) || a.localeCompare(b));
+  }
+
   // ---------- filtering ----------
   function filtered() {
     const q = norm($('q').value).trim();
@@ -110,6 +134,7 @@
     fill($('modelChips'), MODELS);
     const withNotes = list.filter(p => (p.notes || '').trim()).length;
     $('otherChips').replaceChildren(
+      ...customTags().map(t => chip(t, counts[t] || 0, state.tags.has(t), toggle(t))),
       chip('Has notes', withNotes, state.hasNotes, () => { state.hasNotes = !state.hasNotes; refresh(); }));
   }
 
@@ -127,7 +152,7 @@
     const { parts, marked } = highlightAuthors(p.authors, $('author').value);
     const long = parts.length > 8;
     const short = long ? marked.slice(0, 6).join(', ') + ', … , ' + marked[marked.length - 1] : marked.join(', ');
-    const topicTags = p._tags.filter(t => !MODELS.includes(t));
+    const topicTags = orderTags(p._tags.filter(t => !MODELS.includes(t)));
     const modelTags = p._tags.filter(t => MODELS.includes(t));
 
     li.innerHTML =
@@ -145,6 +170,7 @@
       '</div>' +
       '<div class="notes"' + ((p.notes || '').trim() ? '' : ' hidden') + '>' + esc(p.notes) + '</div>' +
       '<div class="note-actions"><button type="button" class="btn small quiet add-note">Add note</button>' +
+        '<button type="button" class="btn small quiet edit-tags">Edit tags</button>' +
         (p.date ? ' <span class="added">Added ' + esc(p.date) + '</span>' : '') + '</div>';
 
     if (long) {
@@ -159,7 +185,70 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }));
     li.querySelector('.add-note').addEventListener('click', () => openNote(li, p));
+    li.querySelector('.edit-tags').addEventListener('click', () => openTags(li, p));
     return li;
+  }
+
+  function openTags(li, p) {
+    if (li.querySelector('.tag-form')) return;
+    const picked = new Set(p._tags);
+    const options = [...TOPICS, ...customTags(), ...MODELS];
+    p._tags.forEach(t => { if (!options.includes(t)) options.push(t); });
+    const f = document.createElement('form');
+    f.className = 'tag-form';
+    f.innerHTML =
+      '<span class="tag-form-label">Tags (click to turn on or off)</span>' +
+      '<div class="chips tag-options"></div>' +
+      '<div class="row"><input type="text" class="new-tag" maxlength="40" placeholder="New tag, e.g. Microglia" aria-label="New tag">' +
+      '<button class="btn small quiet add-tag" type="button">Add</button></div>' +
+      '<div class="row"><button class="btn small" type="submit">Save tags</button>' +
+      '<button class="btn small quiet cancel" type="button">Cancel</button><span class="msg" role="status"></span></div>';
+    li.querySelector('.note-actions').after(f);
+    const box = f.querySelector('.tag-options'), input = f.querySelector('.new-tag'), msg = f.querySelector('.msg');
+
+    const draw = () => {
+      box.replaceChildren(...options.map(t => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'chip';
+        b.textContent = t;
+        b.setAttribute('aria-pressed', picked.has(t) ? 'true' : 'false');
+        b.addEventListener('click', () => { picked.has(t) ? picked.delete(t) : picked.add(t); draw(); });
+        return b;
+      }));
+    };
+    const addNew = () => {
+      const v = input.value.replace(/[,\r\n]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 40);
+      if (!v) return;
+      const existing = options.find(t => t.toLowerCase() === v.toLowerCase());
+      const name = existing || v;
+      if (!existing) options.push(name);
+      picked.add(name);
+      input.value = '';
+      draw();
+    };
+    draw();
+    f.querySelector('.add-tag').addEventListener('click', addNew);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addNew(); } });
+    f.querySelector('.cancel').addEventListener('click', () => f.remove());
+    f.addEventListener('submit', async e => {
+      e.preventDefault();
+      if (input.value.trim()) addNew();
+      f.querySelector('[type=submit]').disabled = true;
+      msg.textContent = 'Saving…';
+      try {
+        const tags = await saveTags(p, orderTags([...picked]));
+        p.tags = tags;
+        p._tags = tags.split(',').map(t => t.trim()).filter(Boolean);
+        p._text = norm([p.title, p.citation, p.notes, p.tags].join(' '));
+        li.replaceWith(paperEl(p));
+        renderChips(filtered());
+        store.set(CACHE, JSON.stringify(state.papers.map(stripPrivate)));
+      } catch (err) {
+        msg.textContent = err.message + ' Try again.';
+        f.querySelector('[type=submit]').disabled = false;
+      }
+    });
   }
 
   function openNote(li, p) {

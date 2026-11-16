@@ -214,3 +214,10 @@ footer a:hover { text-decoration: underline; }
 }
 @keyframes blink { 50% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
+
+/* Tag editor */
+.tag-form { margin-top: 10px; padding: 12px; display: grid; gap: 10px; background: var(--tint); border: 1px solid var(--border); border-radius: var(--radius); }
+.tag-form-label { font-family: var(--mono); font-size: .74rem; color: var(--text-light); text-transform: uppercase; letter-spacing: .06em; }
+.tag-form .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.tag-form .new-tag { flex: 1 1 200px; width: auto; padding: 6px 10px; font-size: .88rem; }
+.tag-form .msg { font-size: .84rem; color: var(--text-light); }

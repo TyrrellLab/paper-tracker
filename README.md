@@ -6,6 +6,8 @@ https://tyrrelllab.github.io/paper-tracker/
 - Search titles, journals and notes, and search by author.
 - Filter by topic tags (Aging, Atherosclerosis, Vascular Biology, Cardiac, Brain,
   Liver, Mitochondria, Immunology, Methods) and by model (Human, Mouse).
+- Edit a paper's tags (turn standard tags on or off, or add your own). The
+  change is saved to the Tags column of the sheet.
 - Add a note to a paper. The note goes into the Notes column of the sheet with
   your name and the date.
 
