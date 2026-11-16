@@ -92,6 +92,8 @@
     return list.slice().sort((a, b) => rank(a) - rank(b) || a.localeCompare(b));
   }
 
+  const isKey = p => p._tags.some(t => t.toLowerCase() === 'key paper');
+
   // ---------- filtering ----------
   function filtered() {
     const q = norm($('q').value).trim();
@@ -109,6 +111,8 @@
     else if (sort === 'year') out.sort((x, y) => y._year - x._year || byAdded(x, y));
     else if (sort === 'yearOld') out.sort((x, y) => (x._year || 9999) - (y._year || 9999));
     else out.sort((x, y) => x.title.localeCompare(y.title));
+    // Key papers go first; the sort is stable, so each group keeps the chosen order.
+    out.sort((x, y) => isKey(y) - isKey(x));
     return out;
   }
 
@@ -147,7 +151,7 @@
 
   function paperEl(p) {
     const li = document.createElement('li');
-    li.className = 'card paper';
+    li.className = 'card paper' + (isKey(p) ? ' key' : '');
     const url = safeUrl(p.link) || safeUrl(p.pubmed);
     const { parts, marked } = highlightAuthors(p.authors, $('author').value);
     const long = parts.length > 8;
@@ -161,7 +165,7 @@
         (long ? ' <button type="button" class="more-authors">all ' + parts.length + '</button>' : '') + '</p>' +
       (p.citation ? '<p class="cite">' + esc(p.citation) + '</p>' : '') +
       '<div class="meta">' +
-        topicTags.map(t => '<button type="button" class="tag" data-tag="' + esc(t) + '">' + esc(t) + '</button>').join('') +
+        topicTags.map(t => '<button type="button" class="tag' + (t.toLowerCase() === 'key paper' ? ' key-tag' : '') + '" data-tag="' + esc(t) + '">' + esc(t) + '</button>').join('') +
         modelTags.map(t => '<button type="button" class="tag model" data-tag="' + esc(t) + '">' + esc(t) + '</button>').join('') +
         '<span class="links">' +
           (safeUrl(p.pubmed) ? '<a href="' + esc(p.pubmed) + '" target="_blank" rel="noopener">PubMed</a>' : '') +

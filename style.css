@@ -221,3 +221,7 @@ footer a:hover { text-decoration: underline; }
 .tag-form .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .tag-form .new-tag { flex: 1 1 200px; width: auto; padding: 6px 10px; font-size: .88rem; }
 .tag-form .msg { font-size: .84rem; color: var(--text-light); }
+
+/* Key papers: listed first, with a solid black tag */
+.tag.key-tag { background: var(--primary-dark); color: #fff; }
+.tag.key-tag:hover { border-color: var(--highlight); }
